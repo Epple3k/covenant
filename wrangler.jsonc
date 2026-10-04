@@ -21,6 +21,7 @@
   "routes": [
     {
       "pattern": "covenant.emitrice.com",
+      "zone_name": "emitrice.com",
       "custom_domain": true
     }
   ]
