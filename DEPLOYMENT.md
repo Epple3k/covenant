@@ -6,8 +6,8 @@ COVENANT is a standalone Cloudflare Worker with D1 storage. It has no ChatGPT ho
 
 1. Open [Deploy to Cloudflare](https://deploy.workers.cloudflare.com/?url=https://github.com/Epple3k/covenant).
 2. Select your Cloudflare account and GitHub account. The template flow copies this repository; use a new repository name such as covenant-demo if covenant already exists in your account. Keep the Worker name covenant, or choose another available name.
-3. Enter NEBIUS_API_KEY in the secret field. Accept the DB binding. Cloudflare provisions the database and substitutes its real ID in wrangler.jsonc.
-4. Check the build command is `pnpm run build` and the deploy command is `pnpm run deploy`. The deployment command applies the database migration before uploading the Worker.
+3. Enter NEBIUS_API_KEY in the secret field if shown, or add it as a Worker secret under Settings → Variables and Secrets after deployment.
+4. Set the build command to `pnpm run build` and the deploy command to `pnpm run deploy`. Do not leave the deploy command at `npx wrangler deploy`: that skips the database setup and migrations. Our deploy script reuses the configured database or finds/creates covenant-db, updates both source and built configurations with its actual ID, applies migrations, then uploads the Worker.
 5. After a successful deployment, open the workers.dev address shown by Cloudflare. Complete setup, compile and confirm the policy, and run Live Nemotron. Use that app address in Devpost.
 
 This dashboard flow requires your authenticated Cloudflare account; a successful local build does not establish that remote provisioning or deployment succeeded. The repository itself contains no provider credentials.
@@ -29,14 +29,16 @@ For local live-model calls, put NEBIUS_API_KEY in an ignored .dev.vars file. The
 
 ```sh
 pnpm exec wrangler login
-pnpm exec wrangler d1 create covenant-db
-pnpm run configure:cloudflare -- REAL_DATABASE_ID_FROM_PREVIOUS_COMMAND
 pnpm run build
-pnpm run secret:nebius
 pnpm run deploy
+pnpm run secret:nebius
 ```
 
-The secret command prompts privately for your Token Factory key. Do not put it in shell arguments or tracked files. The configure helper rejects the placeholder database ID before remote migrations or deployment.
+The secret command prompts privately for your Token Factory key. Do not put it in shell arguments or tracked files. Deployment resolves the database ID automatically in the authenticated account; it preserves any real ID already configured. You can optionally use `pnpm run configure:cloudflare -- REAL_DATABASE_ID` to select an existing database explicitly.
+
+## Recover an initial failed deployment
+
+If the log mentions database `00000000-0000-4000-8000-000000000000`, update to the latest source and open the Worker's Settings → Build configuration. Set the deploy command to `pnpm run deploy`, keep the build command at `pnpm run build`, and retry using the latest commit. The database setup runs inside Cloudflare using the build's existing credentials; no Cloudflare API token belongs in GitHub.
 
 ## Validation
 

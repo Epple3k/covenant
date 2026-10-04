@@ -15,7 +15,7 @@
     "configure:cloudflare": "node scripts/configure-cloudflare.mjs",
     "db:local": "wrangler d1 migrations apply covenant-db --local --config wrangler.jsonc --persist-to .wrangler/state",
     "db:remote": "node scripts/check-cloudflare.mjs && wrangler d1 migrations apply DB --remote --config wrangler.jsonc",
-    "deploy": "node scripts/check-cloudflare.mjs && pnpm run db:remote && wrangler deploy --config dist/server/wrangler.json",
+    "deploy": "node scripts/deploy-cloudflare.mjs",
     "secret:nebius": "node scripts/check-cloudflare.mjs && wrangler secret put NEBIUS_API_KEY --config wrangler.jsonc",
     "test:worker": "node --experimental-strip-types tests/worker-smoke.mjs",
     "db:generate": "drizzle-kit generate"
