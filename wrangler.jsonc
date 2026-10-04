@@ -1,17 +1,27 @@
 {
-  "$schema":"node_modules/wrangler/config-schema.json",
-  "name":"covenant",
-  "main":"worker.ts",
-  "compatibility_date":"2026-05-15",
-  "compatibility_flags":["nodejs_compat"],
-  "workers_dev":true,
-  "vars":{
-    "NEBIUS_BASE_URL":"https://api.tokenfactory.nebius.com/v1/",
-    "NEBIUS_MODEL":"nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "covenant",
+  "main": "worker.ts",
+  "compatibility_date": "2026-05-15",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "workers_dev": true,
+  "vars": {
+    "NEBIUS_BASE_URL": "https://api.tokenfactory.nebius.com/v1/",
+    "NEBIUS_MODEL": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B"
   },
-  "d1_databases":[{
-    "binding":"DB",
-    "database_name":"covenant-db",
-    "migrations_dir":"drizzle"
-  }]
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "covenant-db",
+      "migrations_dir": "drizzle"
+    }
+  ],
+  "routes": [
+    {
+      "pattern": "covenant.emitrice.com",
+      "custom_domain": true
+    }
+  ]
 }

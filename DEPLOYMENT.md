@@ -48,6 +48,12 @@ Run `pnpm test`, `pnpm run typecheck`, and `pnpm run build`. Local acceptance al
 
 All balances, statements, bills, inventory and purchases are fictional. The random HttpOnly cookie isolates each sandbox session. Real financial-account authentication and real payment rails are not implemented. If restricting the demo to named judges, apply Cloudflare Access to the Worker; otherwise configure provider spending limits for the public demo. Do not share API keys as login credentials.
 
+## Project domain
+
+This project's Wrangler configuration attaches `covenant.emitrice.com` as a Worker Custom Domain on deployment. Cloudflare manages the DNS record and TLS certificate. The `emitrice.com` zone must be active in the same Cloudflare account as the Worker, and the build token must allow domain management. The main emitrice.com website is outside this hostname's scope.
+
+If the build cannot attach the domain because of token permissions, open the covenant Worker's Settings → Domains & Routes → Add → Custom Domain and enter `covenant.emitrice.com`. Keep the route in wrangler.jsonc so later deployments retain it. If deploying your own copy on another account, remove this project's routes entry or replace it with a domain you control.
+
 Official references:
 - https://developers.cloudflare.com/workers/platform/deploy-buttons/
 - https://developers.cloudflare.com/d1/reference/migrations/
