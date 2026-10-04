@@ -5,7 +5,7 @@ This is a private research prototype with simulated identity, cash and payments.
 | Threat | Implemented control | Remaining boundary |
 | --- | --- | --- |
 | Prompt injection | Narrow allowlisted tools; strict Zod arguments; no model access to raw balances or credentials | Language interpretation can still be wrong; user must inspect and ratify the draft |
-| Confused deputy | Server establishes agent and policy IDs; model selects fixture IDs; credential binds full intent | Identity is a private-site sandbox cookie, not independently attested agent identity |
+| Confused deputy | Server establishes agent and policy IDs; model selects fixture IDs; credential binds full intent | Identity is a sandbox cookie, not independently attested agent identity |
 | Silent policy changes | Draft ID confirmation, no policy-writing model tool, confirmed-policy enforcement | No external signature or multi-party approval |
 | Split payment bypass | Active commitments reduce cash; receipts and reservations count against aggregate cap | Exposure is session-wide; not a production account-wide multi-session ledger |
 | Replay | Single-use status and atomic revision commit | Real rail integration would need end-to-end idempotency and settlement reconciliation |
@@ -18,7 +18,7 @@ This is a private research prototype with simulated identity, cash and payments.
 | Forecast uncertainty | Three explicit scenarios, uncertain income excluded conservatively, delayed income, pending/recurring obligations | Not calibrated stress testing; undeclared expenses or longer delays can invalidate forecasts |
 | Audit tampering | Hash chain verified server-side; receipt contains execution anchor | An administrator can rewrite the entire chain; no independent external anchoring |
 | Secret exposure | Nebius key only in server environment; no committed secrets, credential logs or browser key | Owner remains responsible for key rotation and provider budget |
-| Cross-site writes | SameSite HttpOnly cookie, origin equality check, private hosting | Mock identity is not a substitute for production user authentication and authorization |
+| Cross-site writes | SameSite HttpOnly cookie, origin equality check; optional Cloudflare Access | Mock identity is not a substitute for production user authentication and authorization |
 
 Amounts are bounded integer cents. Cart sums must match the request; negative, fractional, zero, unsupported-currency and malformed purchase amounts are rejected. Only allowed travel categories exist in the schema. Multiple accounts remain separate unless explicitly chosen as the funding account; credit availability cannot rescue a no-debt liquidity failure.
 

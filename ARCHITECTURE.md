@@ -31,7 +31,7 @@ flowchart TD
 
 ## Data path
 
-The client has no API key and no reusable payment credential. POST `/api/covenant` accepts a discriminated command schema. A private hosted Site plus a random HttpOnly/SameSite session cookie represents mock identity. An origin check rejects cross-origin writes. All balances, decisions, pending reservations, receipts, audit entries, and conversation tool history persist together in a D1 session row.
+The client has no API key and no reusable payment credential. POST `/api/covenant` accepts a discriminated command schema. A random HttpOnly/SameSite session cookie isolates sandbox state; optional Cloudflare Access controls who can reach the hosted app. An origin check rejects cross-origin writes. All balances, decisions, pending reservations, receipts, audit entries, and conversation tool history persist together in a D1 session row.
 
 A command loads revision N, operates on its state copy, and conditionally saves only if revision is still N. Concurrent commands cannot both reserve or consume the same authority. Their effects are sandbox-state changes; there is no external payment side effect before the commit. A 409 requires read-back. A production payment rail would require an outbox/idempotency design to coordinate external effects with the ledger.
 

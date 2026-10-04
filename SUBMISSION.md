@@ -61,8 +61,8 @@ Include the concrete observations in `SPONSOR_FEEDBACK.md`. Review and add your 
 
 ## Human work still required
 
-1. Publish the source ZIP to a **public GitHub, GitLab or Bitbucket repository**, with the MIT license visible. The Site's backing source repository is not a substitute for the required public code URL.
-2. Provide judge access to the demo/test build. This hosted Site remains owner-private; arrange sharing or an unrestricted judge-facing deployment before submitting. Do not provide your provider API key as a login credential.
+1. Publish the source ZIP to a **public GitHub, GitLab or Bitbucket repository**, with the MIT license visible. Public source: https://github.com/Epple3k/covenant.
+2. Provide judge access to the demo/test build. Deploy the standalone Worker through DEPLOYMENT.md, then supply its verified app URL and arrange judge access before submitting. Do not provide your provider API key as a login credential.
 3. Record and upload a **public YouTube video under three minutes**, following `PITCH.md`. Name NVIDIA Nemotron and Nebius Token Factory out loud. Show real working modules, not mock animation.
 4. Review your description, factual tool feedback, authorship/AI-assistance disclosure, eligibility and final Devpost form. Do not claim user research, real payments or integrations that have not occurred.
 

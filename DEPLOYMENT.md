@@ -1,39 +1,52 @@
-# Deployment
+# Deploy COVENANT on your Cloudflare account
 
-The hosted app uses Sites-managed Cloudflare Workers and D1. `.openai/hosting.json` retains the Site identity and logical `DB` binding. Generated SQL migrations are applied before the Worker upload. Source is stored in the Site's Git repository; there is no additional backend to wake up.
+COVENANT is a standalone Cloudflare Worker with D1 storage. It has no ChatGPT hosting, sign-in, connector, or deployment dependency. Model inference runs on Nebius Token Factory. A custom domain is optional; the Worker receives a workers.dev address.
 
-Server runtime values:
+## Dashboard deployment
 
-| Variable | Value |
-| --- | --- |
-| NEBIUS_API_KEY | Secret from the owner's Token Factory account |
-| NEBIUS_BASE_URL | `https://api.tokenfactory.nebius.com/v1/` |
-| NEBIUS_MODEL | `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B` or another verified tool-capable Nemotron model |
+1. Open [Deploy to Cloudflare](https://deploy.workers.cloudflare.com/?url=https://github.com/Epple3k/covenant).
+2. Select your Cloudflare account and GitHub account. The template flow copies this repository; use a new repository name such as covenant-demo if covenant already exists in your account. Keep the Worker name covenant, or choose another available name.
+3. Enter NEBIUS_API_KEY in the secret field. Accept the DB binding. Cloudflare provisions the database and substitutes its real ID in wrangler.jsonc.
+4. Check the build command is `pnpm run build` and the deploy command is `pnpm run deploy`. The deployment command applies the database migration before uploading the Worker.
+5. After a successful deployment, open the workers.dev address shown by Cloudflare. Complete setup, compile and confirm the policy, and run Live Nemotron. Use that app address in Devpost.
 
-The key was configured as a private server-side secret during this build. Changing hosted environment values requires deploying a saved version to apply the new environment revision. Never add secrets to `.openai/hosting.json`, source files, screenshots, or client-side configuration.
+This dashboard flow requires your authenticated Cloudflare account; a successful local build does not establish that remote provisioning or deployment succeeded. The repository itself contains no provider credentials.
 
-## Local or alternate Cloudflare deployment
+## Local development
 
-1. Install the locked dependencies with pnpm and Node 22.13+.
-2. Preserve the build integration in `vite.config.ts` and `build/`.
-3. Generate schema migrations with `pnpm db:generate` when changing `db/schema.ts`. Commit SQL and Drizzle metadata.
-4. Run engine tests, TypeScript checking and `pnpm build`.
-5. Build output is `dist/server/index.js` with a callable default `fetch` export, plus browser assets and generated Wrangler config.
-6. For local Wrangler, apply checked-in migrations with the generated configuration and logical `DB` binding. Supply Nebius values through ignored `.dev.vars` or environment. Start with `pnpm start`.
-7. For an independently provisioned Cloudflare account, bind an owned D1 database in a deployment configuration, migrate it, set the API key with a secret command, then deploy the generated Worker and assets. Do not repurpose the Sites-managed project identity for another provider.
+Use Node 22.13 or later and the pnpm version declared in package.json:
 
-This repository does not ship a separate FastAPI service or a Vercel configuration. It is a single Worker-compatible fullstack app. The API and client share an origin, which avoids cross-origin credentials and transport complexity.
+```sh
+corepack enable
+pnpm install --frozen-lockfile
+pnpm run db:local
+pnpm run dev
+```
 
-## Operational boundaries
+For local live-model calls, put NEBIUS_API_KEY in an ignored .dev.vars file. The base URL and model are declared in wrangler.jsonc. Without a key the clearly labeled fixture controller remains available.
 
-The private hosted audience should be retained until an authenticated user/session and provider-abuse strategy is added for public sharing. Fictional financial data is isolated by the random sandbox-session cookie. Reset clears only that session's simulated history and balance.
+## CLI deployment alternative
 
-A configured-key status is not a provider health check. Use a policy compilation or the live acceptance test to verify model access. Provider timeouts are visible; fixture mode is a clearly labeled rehearsal path.
+```sh
+pnpm exec wrangler login
+pnpm exec wrangler d1 create covenant-db
+pnpm run configure:cloudflare -- REAL_DATABASE_ID_FROM_PREVIOUS_COMMAND
+pnpm run build
+pnpm run secret:nebius
+pnpm run deploy
+```
 
-## Validation during this build
+The secret command prompts privately for your Token Factory key. Do not put it in shell arguments or tracked files. The configure helper rejects the placeholder database ID before remote migrations or deployment.
 
-- 27 deterministic tests passed, including storage concurrency and session isolation.
-- Live policy compilation and six Nemotron tool turns produced the $380 denial and $185 executed receipt.
-- The enhanced live challenge passed: 9 agent turns plus policy compilation, $185 authority invalidated after a $100 bill, and $95 executed with a $1,505 future minimum. Sanitized evidence is in `docs/live-challenge-run.json`.
-- TypeScript check and production Worker build passed.
-- The supervised preview reported running, but its internal address was unreachable; the required browser-control skill was unavailable. Visual browser QA and WebMCP registration validation could not be performed. WebMCP tools are feature-detected and optional; no financial path depends on them.
+## Validation
+
+Run `pnpm test`, `pnpm run typecheck`, and `pnpm run build`. Local acceptance also exercises the actual Worker API and D1 migration. Live-model evidence from the original financial scenario is retained in docs/live-challenge-run.json; it is one observed run, not a reliability benchmark. The independent Cloudflare deployment must be checked after it succeeds.
+
+## Judge access
+
+All balances, statements, bills, inventory and purchases are fictional. The random HttpOnly cookie isolates each sandbox session. Real financial-account authentication and real payment rails are not implemented. If restricting the demo to named judges, apply Cloudflare Access to the Worker; otherwise configure provider spending limits for the public demo. Do not share API keys as login credentials.
+
+Official references:
+- https://developers.cloudflare.com/workers/platform/deploy-buttons/
+- https://developers.cloudflare.com/d1/reference/migrations/
+- https://developers.cloudflare.com/workers/configuration/secrets/

@@ -1,5 +1,9 @@
 # COVENANT
 
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Epple3k/covenant)
+
+A standalone React and TypeScript app on Cloudflare Workers + D1, with inference on Nebius Token Factory. See [DEPLOYMENT.md](DEPLOYMENT.md) for deployment under your own account.
+
 [MIT License](LICENSE) · NVIDIA Nemotron 3 Nano · Nebius Token Factory
 
 Forward-looking financial authority for autonomous AI agents. A working research and hackathon prototype, with fictional balances, fixture travel inventory, and sandbox payments.
@@ -8,7 +12,8 @@ A travel agent may have permission to spend $400, yet a $380 purchase can still 
 
 ## Working demonstration
 
-- Starting checking: **$2,900**. Rent on day five: **$1,200**. Required reserve: **$1,500**. Trip cap: **$400**. New debt: **prohibited**.
+- First-use guide: choose checking plus a monthly paid card, understand protected bills, then compile and explicitly confirm the agent rules. Completion persists for the sandbox session; **How it works** reopens instructions. No real bank connection is implied.
+- Default guided scenario: checking **$3,500**, rent on day five **$1,200**, card statement paid from checking on day nine **$600**. The checking-only scenario starts at **$2,900** with no card bill. Both leave the same **$200** safe starting authority. Required reserve: **$1,500**. Trip cap: **$400**. New debt: **prohibited**.
 - Nemotron selects the premium **$380** option. Future minimum is **$1,320**; deterministic code denies it.
 - Agent receives a bounded **$150–$200** safe range, without account balances or rent details.
 - Agent selects the **$185** coach/hostel/transit option. Future minimum is **$1,515**; code approves it.
@@ -35,20 +40,16 @@ lib/covenant/constants.ts   shared demo instruction
 
 ## Clean clone
 
-Requires Node 22.13+ (Node 24 recommended), pnpm, and a Cloudflare development runtime. Keep the lockfile.
+Requires Node 22.13+ and the pnpm version declared in package.json. Keep the lockfile.
 
 ```sh
+corepack enable
 pnpm install --frozen-lockfile
-cp .env.example .env
-pnpm db:generate
-pnpm build
-pnpm exec wrangler d1 execute DB --local --config dist/server/wrangler.json --file drizzle/0000_overjoyed_mister_fear.sql
-pnpm start
+pnpm run db:local
+pnpm run dev
 ```
 
-The checked-in initial migration already exists; `db:generate` reports no changes unless you alter the schema. The build emits the Worker, assets, migrations, and generated Wrangler configuration. `.openai/hosting.json` names the logical database binding `DB`; production provisioning and migrations are handled by Sites. Portable environments can use `pnpm dev` for Vinext preview; production `pnpm start` is the most direct clean-clone runtime. See the starter's README and deployment notes for runtime-specific details.
-
-Set `.env` values for build/dev as needed. For `pnpm start`, supply the same secrets through Wrangler's `.dev.vars` or runtime environment. No credentials are included. `.env.example` is intentionally tracked; all actual env files and `.dev.vars` are ignored.
+For production-style local verification, run `pnpm run build`, then `pnpm start`. The D1 migration is checked in. Root wrangler.jsonc defines the database, Worker, and non-secret model settings. Put your API key in an ignored .dev.vars file when running locally; hosted deployments use a Worker secret. See DEPLOYMENT.md for the dashboard deployment button and CLI alternative.
 
 ## Model configuration
 
@@ -86,10 +87,14 @@ COVENANT explores the financial-risk and authority layer between agent reasoning
 
 ## Scope and limits
 
-This app implements mock identity in a private hosted Site with an opaque HttpOnly sandbox-session cookie. It is not a bank, a production financial service, or a certified payment-control system. No bank connection or real purchase is performed. Forecasts use declared scenario rules, not calibrated probabilistic risk models. D1 sessions store their own ledgers; a shared household/multi-agent portfolio would need an account-wide transactional authority service. See `SECURITY.md`.
+This app uses an opaque HttpOnly sandbox-session cookie to isolate fictional financial state. Hosting access can be restricted with Cloudflare Access. It is not a bank, a production financial service, or a certified payment-control system. No bank connection or real purchase is performed. Forecasts use declared scenario rules, not calibrated probabilistic risk models. D1 sessions store their own ledgers; a shared household/multi-agent portfolio would need an account-wide transactional authority service. See `SECURITY.md`.
 
 The audit chain detects alterations within the stored chain. It is not independently notarized: a database administrator could rewrite the chain. Receipts preserve an anchor suitable for external verification, but there is no external anchor service in this prototype.
 
-See the hackathon package: [SUBMISSION.md](SUBMISSION.md), [PITCH.md](PITCH.md), [SPONSOR_FEEDBACK.md](SPONSOR_FEEDBACK.md). A public code repository, judge access and your recorded video still need to be supplied.
+See the hackathon package: [SUBMISSION.md](SUBMISSION.md), [PITCH.md](PITCH.md), [SPONSOR_FEEDBACK.md](SPONSOR_FEEDBACK.md). A public repository is available at https://github.com/Epple3k/covenant. The independent demo URL, judge access and your recorded video still need to be supplied.
 
 See [DEMO.md](DEMO.md), [ARCHITECTURE.md](ARCHITECTURE.md), [SECURITY.md](SECURITY.md), and [DEPLOYMENT.md](DEPLOYMENT.md).
+
+## Existing spending
+
+The checking-plus-card fixture models the existing statement as one scheduled checking outflow. The card liability snapshot is not cash and is not deducted twice. Agent purchases still use checking and cannot create new debt under the default policy. A future bank-connected implementation would import manual checking transactions and card repayment obligations, reconcile pending/posted records and re-check updated state before payment. This demo has fictional snapshots and a user-triggered bill simulation, not a live transaction feed or real card settlement.

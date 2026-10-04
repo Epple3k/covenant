@@ -2,7 +2,7 @@
 
 ## Preparation
 
-Open the app on desktop, use Reset demo, and leave the starting fixture at $2,900 checking / $1,200 rent / $900 uncertain paycheck. Select Live Nemotron. Verify the header says NEMOTRON CONNECTED. That label means a secret is configured; a successful model turn confirms inference.
+Open the app on desktop, complete the first-use guide with **Checking + a card paid monthly**. The starting fixture is $3,500 checking / $1,200 rent / $600 monthly card payment / $900 uncertain paycheck. For returning users, **How it works** reopens the guide without altering rules or balances. Reset preserves the selected setup; the original checking-only fixture remains available during first setup. Select Live Nemotron. Verify the header says NEMOTRON CONNECTED. That label means a secret is configured; a successful model turn confirms inference.
 
 Allow time for model inference. The provider's reasoning latency can push the total beyond three minutes. For a strict presentation slot, compile and confirm the policy immediately before presenting, then show the autonomous session live. Fixture mode is useful for rehearsal or an outage, and must be identified honestly.
 
@@ -11,7 +11,7 @@ Allow time for model inference. The provider's reasoning latency can push the to
 1. With the default instruction in Define authority, select **Live Nemotron** and click **Compile policy**. The draft should show a $400 trip cap, $1,500 future reserve, prohibited debt, travel categories, and bounded disclosure. Inspect the JSON if desired.
 2. Click **Confirm this policy**. Explain that the model cannot silently create financial authority.
 3. Click **Start travel agent**. Stay on **Agent session**. The backend calls the actual model once per turn; browser updates show persisted tool results and inference token usage, not private chain-of-thought.
-4. Watch the first $380 request get denied. The chart drops to $1,320 at rent, beneath the $1,500 floor. The agent receives only a code and safe spending band.
+4. Watch the first $380 request get denied. The chart drops to $1,320 after rent and the card payment, beneath the $1,500 floor. The agent receives only a code and safe spending band.
 5. Watch Nemotron choose the $185 alternative, request authority, execute the exact scoped credential, and finish. No manual replan click is needed.
 6. Click the rejected decision or open **Decision inspector**, selecting the $380 denial. Show that the $400 budget passes but future liquidity fails by $180.
 7. Select the $185 approval. The conservative minimum is $1,515. Switch to **Receipt ledger** to show the itemized receipt, policy checks, intent hash, and verified audit chain. Download the receipt JSON if needed.
@@ -23,7 +23,7 @@ Allow time for model inference. The provider's reasoning latency can push the to
 
 0:25–0:50: “I state my intent. Nemotron drafts explicit rules, and I approve them. The model proposes; deterministic code controls the money.”
 
-0:50–1:45: “The agent chooses a $380 itinerary. It is below the $400 cap, but after rent my balance would fall to $1,320. COVENANT denies it. The agent receives a bounded safe budget and chooses $185 instead.”
+0:50–1:45: “The agent chooses a $380 itinerary. It is below the $400 cap, but after rent and the card payment my balance would fall to $1,320. COVENANT denies it. The agent receives a bounded safe budget and chooses $185 instead.”
 
 1:45–2:30: “That itinerary leaves $1,515. The engine issues a single-use authorization for the exact merchant, amount, cart, purpose, currency, policy, and agent. The sandbox validates it before execution.”
 
@@ -34,7 +34,7 @@ Allow time for model inference. The provider's reasoning latency can push the to
 - Provider failure: read the error. Click **Resume agent** in Agent session to continue from persisted state; never claim live success for fixture mode.
 - Agent revoked or policy revoked: reset and recompile. Revocation is intentionally irreversible within the session.
 - Too many requests: reset the sandbox or wait for the ten-minute velocity window. Real systems would retain account-wide velocity across sessions.
-- After a successful booking, **Reset demo** restores the original scenario.
+- After a successful booking, **Reset demo** restores the chosen account scenario.
 - If a resumed model step has reached its 16-turn cap, reset. The app does not run unbounded inference.
 
 ## Stronger live challenge

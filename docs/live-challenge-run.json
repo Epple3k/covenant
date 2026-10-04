@@ -1,0 +1,180 @@
+{
+  "recorded_at": "2026-10-04T18:43:18.485Z",
+  "scenario": "new-obligation-before-payment",
+  "single_run": true,
+  "scope": "Actual live model and pure engine; not hosted browser QA.",
+  "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+  "model_calls": 10,
+  "total_tokens": 23429,
+  "total_model_latency_ms": 79015,
+  "turns": [
+    {
+      "kind": "MODEL_POLICY_DRAFTED",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 253,
+        "prompt_tokens": 206,
+        "total_tokens": 459,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 9257
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 317,
+        "prompt_tokens": 901,
+        "total_tokens": 1218,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 3145,
+      "tools": [
+        "get_policy_constraints"
+      ]
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 802,
+        "prompt_tokens": 1019,
+        "total_tokens": 1821,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 6426,
+      "tools": [
+        "search_travel_options"
+      ]
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 1787,
+        "prompt_tokens": 1274,
+        "total_tokens": 3061,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 13499,
+      "tools": [
+        "request_authorization"
+      ]
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 1362,
+        "prompt_tokens": 1389,
+        "total_tokens": 2751,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 10366,
+      "tools": [
+        "request_authorization"
+      ]
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 536,
+        "prompt_tokens": 1627,
+        "total_tokens": 2163,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 4899,
+      "tools": [
+        "execute_authorized_purchase"
+      ]
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 2434,
+        "prompt_tokens": 1776,
+        "total_tokens": 4210,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 19990,
+      "tools": [
+        "search_travel_options"
+      ]
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 422,
+        "prompt_tokens": 2031,
+        "total_tokens": 2453,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 3947,
+      "tools": [
+        "request_authorization"
+      ]
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 173,
+        "prompt_tokens": 2211,
+        "total_tokens": 2384,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 2183,
+      "tools": [
+        "execute_authorized_purchase"
+      ]
+    },
+    {
+      "kind": "MODEL_TURN",
+      "model": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B",
+      "usage": {
+        "completion_tokens": 570,
+        "prompt_tokens": 2339,
+        "total_tokens": 2909,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "latency_ms": 5303,
+      "tools": [
+        "finish_task"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "amount": 38000,
+      "decision": "DENIED",
+      "code": "FORWARD_LIQUIDITY_VIOLATION"
+    },
+    {
+      "amount": 18500,
+      "decision": "APPROVED",
+      "code": "POLICY_PASS"
+    },
+    {
+      "amount": 9500,
+      "decision": "APPROVED",
+      "code": "POLICY_PASS"
+    }
+  ],
+  "invalidated_authorizations": 1,
+  "executed_amount": 9500,
+  "conservative_minimum": 150500,
+  "audit_verified": true
+}
