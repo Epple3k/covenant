@@ -65,7 +65,9 @@ Live mode never silently falls back to a script. Provider failures stop the driv
 
 ## Changing-obligation challenge
 
-After confirming policy, check **Pause after authorization to change an obligation**. Start the live agent. At the checkpoint, enter **100** and click **Apply bill and resume agent**. The existing authorization is invalidated at execution, and the agent must obtain new authority. Use **150** to make all itineraries infeasible; the agent should stop without spending. The original automatic demo remains available with the checkbox off.
+The main Workspace shows each proposal’s cap check, lowest forecast balance, and current permission status. The changing-bill challenge is enabled by default. Prepare and approve the guided rules, then click **Start agent**. At the pre-payment checkpoint, click **Add $100 bill**: the old $185 permission is withdrawn and the agent must obtain new authority for a $95 trip. **Add $150 bill** makes all supplied options infeasible, so the agent stops without spending. **Continue without a bill** executes the original safe option. Disable **Try a change of plans** below to run without the checkpoint.
+
+Actual model calls, tokens, latest tools, and bounded disclosure appear directly in the main flow. **Try to break the permission** runs isolated merchant-tampering, token-replay, expiry, and aggregate-exposure tests. The eight-case comparison is available there as well; it is explicitly labeled as a hand-authored regression set.
 
 ## Checks
 

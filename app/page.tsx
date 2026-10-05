@@ -34,7 +34,7 @@ const available=s.policy?(policyActive?data.safe_authority:0):Math.max(0,baselin
 const stopped=s.agent.status==='stopped'||!!s.policy&&!policyActive;
 const phaseLabel=receipt?'Purchase complete':s.agent.status==='paused'?'Your input needed':busy?'Working…':stopped?'Session stopped':s.agent.status==='running'?'Finding your trip':s.draft?'Review before approving':s.policy?'Ready to start':'Start with your rules';
 const savedInstruction=([...s.audit].reverse().find(a=>a.type==='POLICY_DRAFTED')?.data as {instruction?:unknown}|undefined)?.instruction;
-const requestText=typeof savedInstruction==='string'?savedInstruction:text;
+const requestText=typeof savedInstruction==='string'?savedInstruction.split('\nMy explicit limits:')[0]:text;
 function openTab(value:string){setTab(value);requestAnimationFrame(()=>document.getElementById('workspace-views')?.scrollIntoView({behavior:'smooth',block:'start'}));}
 function downloadReceipt(){if(!receipt)return;const url=URL.createObjectURL(new Blob([JSON.stringify({receipt,audit:s.audit},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='covenant-intent-receipt.json';a.click();URL.revokeObjectURL(url);}
 return <div className="shell">
