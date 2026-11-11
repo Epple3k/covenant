@@ -54,7 +54,7 @@ export function prepareDatabase({ root = process.cwd(), run }) {
 export function deploy({ root = process.cwd(), run }) {
   prepareDatabase({ root, run });
   run(['d1', 'migrations', 'apply', 'DB', '--remote', '--config', resolve(root, 'wrangler.jsonc')]);
-  run(['deploy', '--config', resolve(root, 'dist/server/wrangler.json')]);
+  return run(['deploy', '--config', resolve(root, 'dist/server/wrangler.json')], true);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
@@ -69,5 +69,17 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     if (result.status !== 0) throw Error(`Wrangler ${args.slice(0, 2).join(' ')} failed; deployment stopped.`);
     return result.stdout;
   };
-  deploy({ run });
+  const output = deploy({ run });
+  if (output) console.log(output);
+  // Run post-deploy acceptance from Cloudflare's build runner, which has
+  // network access to the public Worker. The user's browser is not required.
+  if (process.env.COVENANT_POST_DEPLOY_SMOKE !== '0') {
+    const workerUrl = String(output ?? '').match(/https:\/\/[a-z0-9.-]+\.workers\.dev/i)?.[0];
+    const result = spawnSync(process.execPath, [resolve('scripts/verify-production.mjs')], {
+      stdio: 'inherit',
+      env: { ...process.env, ...(workerUrl ? { COVENANT_DEPLOYED_URL: workerUrl } : {}) },
+    });
+    if (result.error) throw result.error;
+    if (result.status !== 0) throw Error('Production acceptance failed after upload. See verification output above.');
+  }
 }

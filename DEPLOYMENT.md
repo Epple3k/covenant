@@ -51,6 +51,10 @@ After an automated Cloudflare Workers build of `main`, verify the active product
 - To validate live AI behavior, confirm the Worker has a configured `NEBIUS_API_KEY` secret, run the live model once, and inspect real provider activity. Do not put the secret in GitHub or client-side files.
 - If the custom hostname does not resolve, inspect Worker **Domains & Routes** plus DNS/zone ownership. The underlying Workers service may still be deployed independently of the custom hostname.
 
+## Automated production acceptance
+
+Production builds run `scripts/verify-production.mjs` after `pnpm run deploy`. The check uses a new fictional session to validate the public page, Cloudflare D1 reads and writes, policy enforcement, synthetic purchase, audit chain, and one live Nebius policy + tool call. It does not place any real payments. A missing API key, invalid model/provider response, or inaccessible custom hostname causes the build check to fail after upload, leaving the uploaded Worker version available for diagnosis. Set `COVENANT_POST_DEPLOY_SMOKE=0` only when deliberately skipping this acceptance in a restricted/private environment.
+
 ## Validation
 
 Run `pnpm test`, `pnpm run typecheck`, and `pnpm run build`. Local acceptance also exercises the actual Worker API and D1 migration. Live-model evidence from the original financial scenario is retained in docs/live-challenge-run.json; it is one observed run, not a reliability benchmark. The independent Cloudflare deployment must be checked after it succeeds.
