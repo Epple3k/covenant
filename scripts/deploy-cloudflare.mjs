@@ -33,6 +33,15 @@ export function prepareDatabase({ root = process.cwd(), run }) {
   }
   if (!uuid.test(id ?? '') || id === placeholder) throw Error('Could not resolve a real D1 database ID.');
 
+  // Vinext emits a separate Wrangler configuration. Preserve the production
+  // secret contract so a missing model key cannot silently ship in live mode.
+  if (source.secrets?.required?.length) {
+    built.secrets = {
+      ...built.secrets,
+      required: [...new Set([...(built.secrets?.required ?? []), ...source.secrets.required])],
+    };
+  }
+
   // Vite generates a separate deploy configuration. Both must refer to the same database.
   binding.database_id = id;
   builtBinding.database_id = id;

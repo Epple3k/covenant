@@ -6,7 +6,7 @@ COVENANT is a standalone Cloudflare Worker with D1 storage. It has no ChatGPT ho
 
 1. Open [Deploy to Cloudflare](https://deploy.workers.cloudflare.com/?url=https://github.com/Epple3k/covenant).
 2. Select your Cloudflare account and GitHub account. The template flow copies this repository; use a new repository name such as covenant-demo if covenant already exists in your account. Keep the Worker name covenant, or choose another available name.
-3. Enter NEBIUS_API_KEY in the secret field if shown, or add it as a Worker secret under Settings → Variables and Secrets after deployment.
+3. Enter NEBIUS_API_KEY as a Worker secret before deployment (Settings → Variables and Secrets, or the deploy template secret field). Deployment now requires this secret; the build fails safely if it is absent, instead of presenting live Nemotron as available.
 4. Set the build command to `pnpm run build` and the deploy command to `pnpm run deploy`. Do not leave the deploy command at `npx wrangler deploy`: that skips the database setup and migrations. Our deploy script reuses the configured database or finds/creates covenant-db, updates both source and built configurations with its actual ID, applies migrations, then uploads the Worker.
 5. After a successful deployment, open the workers.dev address shown by Cloudflare. Complete setup, compile and confirm the policy, and run Live Nemotron. Use that app address in Devpost.
 

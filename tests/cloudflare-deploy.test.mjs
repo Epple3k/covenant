@@ -73,3 +73,15 @@ test('failed migration prevents Worker upload', (t) => {
     throw Error('Migration failed');
   } }), /Migration failed/);
 });
+
+test('propagates required Nebius secrets to the deploy configuration', (t) => {
+  const root = fixture(t, id);
+  const sourcePath = join(root, 'wrangler.jsonc');
+  const source = JSON.parse(readFileSync(sourcePath, 'utf8'));
+  source.secrets = { required: ['NEBIUS_API_KEY'] };
+  writeFileSync(sourcePath, JSON.stringify(source));
+  deploy({ root, run() {
+    const built = JSON.parse(readFileSync(join(root, 'dist/server/wrangler.json'), 'utf8'));
+    assert.deepEqual(built.secrets?.required, ['NEBIUS_API_KEY']);
+  } });
+});

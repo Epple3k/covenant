@@ -24,5 +24,10 @@
       "zone_name": "emitrice.com",
       "custom_domain": true
     }
-  ]
+  ],
+  "secrets": {
+    "required": [
+      "NEBIUS_API_KEY"
+    ]
+  }
 }
