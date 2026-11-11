@@ -40,6 +40,17 @@ The secret command prompts privately for your Token Factory key. Do not put it i
 
 If the log mentions database `00000000-0000-4000-8000-000000000000`, update to the latest source and open the Worker's Settings → Build configuration. Set the deploy command to `pnpm run deploy`, keep the build command at `pnpm run build`, and retry using the latest commit. The database setup runs inside Cloudflare using the build's existing credentials; no Cloudflare API token belongs in GitHub.
 
+## Live deployment verification
+
+After an automated Cloudflare Workers build of `main`, verify the active production service in the [Cloudflare Workers dashboard](https://dash.cloudflare.com/09bbaa78c539eb780511bf45474d6d42/workers/services/view/covenant/production).
+
+- Project custom domain: [covenant.emitrice.com](https://covenant.emitrice.com).
+- Prior Workers development address: [covenant.emitrice-09b.workers.dev](https://covenant.emitrice-09b.workers.dev). Confirm it is enabled before treating it as a fallback.
+- Check the newest GitHub commit's **Workers Builds: covenant** check for `success`; this confirms Cloudflare's build/deployment reporting but does not substitute for checking the website.
+- Open the app in a fresh session, finish policy setup, and run the fixture demonstration. Confirm a reserve-violating option is denied, a safe option is approved, and the audit is recorded.
+- To validate live AI behavior, confirm the Worker has a configured `NEBIUS_API_KEY` secret, run the live model once, and inspect real provider activity. Do not put the secret in GitHub or client-side files.
+- If the custom hostname does not resolve, inspect Worker **Domains & Routes** plus DNS/zone ownership. The underlying Workers service may still be deployed independently of the custom hostname.
+
 ## Validation
 
 Run `pnpm test`, `pnpm run typecheck`, and `pnpm run build`. Local acceptance also exercises the actual Worker API and D1 migration. Live-model evidence from the original financial scenario is retained in docs/live-challenge-run.json; it is one observed run, not a reliability benchmark. The independent Cloudflare deployment must be checked after it succeeds.
